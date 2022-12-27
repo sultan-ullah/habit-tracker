@@ -30,7 +30,19 @@ class HabitManager {
     return array;
   }
 
-  update() { }
+  async update(username, habitName, changes) {
+    logger.info(`changes: ${JSON.stringify(changes)}`)
+    logger.info(`Getting habit ${habitName} for user ${username}`);
+    const collection = await dbConnector.getCollection(COLLECTION_NAME);
+    const result = await collection.updateOne(
+      { username, habitName },
+      { $set: { ...changes } },
+      { upsert: true }
+    );
+    logger.info(result);
+    return result.acknowledged;
+  }
+
 
   async delete(username, habitName) {
     logger.info(`Deleting habit ${habitName} for user with username: ${username}`);
@@ -45,13 +57,6 @@ class HabitManager {
     return array;
   }
 }
-
-const myHabitManager = new HabitManager();
-// myHabitManager.create("test", "habit", "", new Date().toISOString()).then(result => {
-  myHabitManager.readAllForUser("test").then(result => {
-    logger.info(result);
-  })
-// });
 
 if (!habitManager) {
   module.exports = new HabitManager();
