@@ -8,7 +8,7 @@ const usersRouter = require('./usersRouter');
 const dotenv = require('dotenv');
 dotenv.config();
 const corsOptions = {
-  origin: "http://localhost:3001",
+  origin: "http://localhost:3000",
 };
 
 
